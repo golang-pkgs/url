@@ -8,7 +8,5 @@ func GetFullQuestURI(r *http.Request) string {
 		scheme = "https://"
 	}
 
-	println(scheme + r.Host + r.RequestURI)
-
 	return scheme + r.Host + r.RequestURI
 }
