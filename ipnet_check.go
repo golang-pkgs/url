@@ -10,9 +10,9 @@ type Rule struct {
 }
 
 // If DenyLocal, request from
-// If the Deny rule contains string "*", test func always return false, otherwise
-//     If the Allow rules contains string "*", test always return true, otherwise the return value is test by rules, deny rules take higher priority.
-func CreateRuleTest(rule Rule) func(ip string) bool {
+// If the Deny rule contains string "*", Checker func always return false, otherwise
+//     If the Allow rules contains string "*", Checker always return true, otherwise the return value is Checker by rules, deny rules take higher priority.
+func CreateRuleChecker(rule Rule) func(ip string) bool {
 	if rule.DenyLocal {
 		rule.Deny = append(rule.Deny, "127.0.0.1/32")
 	} else {
@@ -81,40 +81,40 @@ func CreateRuleTest(rule Rule) func(ip string) bool {
 	}
 }
 
-var AllowAllTest = CreateRuleTest(Rule{
+var AllowAllChecker = CreateRuleChecker(Rule{
 	Allow: []string{"*"},
 })
-var DenyAllTest = CreateRuleTest(Rule{
+var DenyAllChecker = CreateRuleChecker(Rule{
 	Deny: []string{"*"},
 })
 
-var OnlyAllowATest = CreateRuleTest(Rule{
+var OnlyAllowAChecker = CreateRuleChecker(Rule{
 	Allow: []string{"10.0.0.0/8"},
 })
 
-var OnlyDenyATest = CreateRuleTest(Rule{
+var OnlyDenyAChecker = CreateRuleChecker(Rule{
 	Deny:            []string{"10.0.0.0/8"},
 	DefaultAllowAll: true,
 })
 
-var OnlyAllowBTest = CreateRuleTest(Rule{
+var OnlyAllowBChecker = CreateRuleChecker(Rule{
 	Allow: []string{"72.16.0.0/12"},
 })
 
-var OnlyDenyBTest = CreateRuleTest(Rule{
+var OnlyDenyBChecker = CreateRuleChecker(Rule{
 	Deny:            []string{"72.16.0.0/12"},
 	DefaultAllowAll: true,
 })
 
-var OnlyAllowCTest = CreateRuleTest(Rule{
+var OnlyAllowCChecker = CreateRuleChecker(Rule{
 	Allow: []string{"	192.168.0.0/16"},
 })
 
-var OnlyDenyCTest = CreateRuleTest(Rule{
+var OnlyDenyCChecker = CreateRuleChecker(Rule{
 	Deny: []string{"	192.168.0.0/16"},
 	DefaultAllowAll: true,
 })
 
-var OnlyAllowInternalTest = OnlyAllowATest
+var OnlyAllowInternalChecker = OnlyAllowAChecker
 
-var OnlyDenyInternalTest = OnlyDenyATest
+var OnlyDenyInternalChecker = OnlyDenyAChecker
