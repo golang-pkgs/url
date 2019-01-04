@@ -7,9 +7,11 @@ import (
 type Rule struct {
 	Allow           []string
 	Deny            []string
+	DenyLocal       bool
 	DefaultAllowAll bool
 }
 
+// AllowLocal
 // If the Deny rule contains string "*", test func always return false, otherwise
 //     If the Allow rules contains string "*", test always return true, otherwise the return value is test by rules, deny rules take higher priority.
 func CreateRuleTest(rule Rule) func(ip string) bool {
@@ -29,15 +31,23 @@ func CreateRuleTest(rule Rule) func(ip string) bool {
 		}
 	}
 
-	return func(ip string) bool {
+	return func(addr string) bool {
+		ip, _, err := net.SplitHostPort(addr)
+
+		if err != nil {
+			return false
+		}
+
 		for _, denyRule := range rule.Deny {
 			if denyRule != "*" {
 				_, ipNet, err := net.ParseCIDR(denyRule)
-				if err == nil {
-					c := ipNet.Contains(net.ParseIP(ip))
-					if c {
-						return false
-					}
+				if err != nil {
+					continue
+				}
+
+				c := ipNet.Contains(net.ParseIP(ip))
+				if c {
+					return false
 				}
 			}
 		}
@@ -45,11 +55,13 @@ func CreateRuleTest(rule Rule) func(ip string) bool {
 		for _, allowRule := range rule.Allow {
 			if allowRule != "*" {
 				_, ipNet, err := net.ParseCIDR(allowRule)
-				if err == nil {
-					c := ipNet.Contains(net.ParseIP(ip))
-					if c {
-						return true
-					}
+				if err != nil {
+					continue
+				}
+
+				c := ipNet.Contains(net.ParseIP(ip))
+				if c {
+					return true
 				}
 			}
 		}
@@ -75,20 +87,20 @@ var OnlyDenyATest = CreateRuleTest(Rule{
 })
 
 var OnlyAllowBTest = CreateRuleTest(Rule{
-	Allow: []string{"10.0.0.0/8"},
+	Allow: []string{"72.16.0.0/12"},
 })
 
 var OnlyDenyBTest = CreateRuleTest(Rule{
-	Deny:            []string{"10.0.0.0/8"},
+	Deny:            []string{"72.16.0.0/12"},
 	DefaultAllowAll: true,
 })
 
 var OnlyAllowCTest = CreateRuleTest(Rule{
-	Allow: []string{"10.0.0.0/8"},
+	Allow: []string{"	192.168.0.0/16"},
 })
 
 var OnlyDenyCTest = CreateRuleTest(Rule{
-	Deny:            []string{"10.0.0.0/8"},
+	Deny: []string{"	192.168.0.0/16"},
 	DefaultAllowAll: true,
 })
 
