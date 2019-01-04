@@ -12,7 +12,7 @@ type Rule struct {
 
 // If the Deny rule contains string "*", test func always return false, otherwise
 //     If the Allow rules contains string "*", test always return true, otherwise the return value is test by rules, deny rules take higher priority.
-func IpnetTest(rule Rule) func(ip string) bool {
+func CreateRuleTest(rule Rule) func(ip string) bool {
 	for _, denyRule := range rule.Deny {
 		if denyRule == "*" {
 			return func(ip string) bool {
@@ -57,3 +57,41 @@ func IpnetTest(rule Rule) func(ip string) bool {
 		return rule.DefaultAllowAll
 	}
 }
+
+var AllowAllTest = CreateRuleTest(Rule{
+	Allow: []string{"*"},
+})
+var DenyAllTest = CreateRuleTest(Rule{
+	Deny: []string{"*"},
+})
+
+var OnlyAllowATest = CreateRuleTest(Rule{
+	Allow: []string{"10.0.0.0/8"},
+})
+
+var OnlyDenyATest = CreateRuleTest(Rule{
+	Deny:            []string{"10.0.0.0/8"},
+	DefaultAllowAll: true,
+})
+
+var OnlyAllowBTest = CreateRuleTest(Rule{
+	Allow: []string{"10.0.0.0/8"},
+})
+
+var OnlyDenyBTest = CreateRuleTest(Rule{
+	Deny:            []string{"10.0.0.0/8"},
+	DefaultAllowAll: true,
+})
+
+var OnlyAllowCTest = CreateRuleTest(Rule{
+	Allow: []string{"10.0.0.0/8"},
+})
+
+var OnlyDenyCTest = CreateRuleTest(Rule{
+	Deny:            []string{"10.0.0.0/8"},
+	DefaultAllowAll: true,
+})
+
+var OnlyAllowInternalTest = OnlyAllowATest
+
+var OnlyDenyInternalTest = OnlyDenyATest
