@@ -1,8 +1,6 @@
 package url
 
-import (
-	"net"
-)
+import "net"
 
 type Rule struct {
 	Allow           []string
