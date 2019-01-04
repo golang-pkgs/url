@@ -11,10 +11,16 @@ type Rule struct {
 	DefaultAllowAll bool
 }
 
-// AllowLocal
+// If DenyLocal, request from
 // If the Deny rule contains string "*", test func always return false, otherwise
 //     If the Allow rules contains string "*", test always return true, otherwise the return value is test by rules, deny rules take higher priority.
 func CreateRuleTest(rule Rule) func(ip string) bool {
+	if rule.DenyLocal {
+		rule.Deny = append(rule.Deny, "127.0.0.1/32")
+	} else {
+		rule.Allow = append(rule.Allow, "127.0.0.1/32")
+	}
+
 	for _, denyRule := range rule.Deny {
 		if denyRule == "*" {
 			return func(ip string) bool {
