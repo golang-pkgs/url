@@ -38,10 +38,17 @@ func CreateRuleTest(rule Rule) func(ip string) bool {
 	}
 
 	return func(addr string) bool {
+		if addr == "" {
+			return false
+		}
 		ip, _, err := net.SplitHostPort(addr)
 
 		if err != nil {
 			return false
+		}
+
+		if ip == "" {
+			ip = addr
 		}
 
 		for _, denyRule := range rule.Deny {
