@@ -88,33 +88,33 @@ var DenyAllChecker = CreateRuleChecker(Rule{
 	Deny: []string{"*"},
 })
 
-var OnlyAllowAChecker = CreateRuleChecker(Rule{
+var OnlyAllowAClassNetChecker = CreateRuleChecker(Rule{
 	Allow: []string{"10.0.0.0/8"},
 })
 
-var OnlyDenyAChecker = CreateRuleChecker(Rule{
+var OnlyDenyAClassNetChecker = CreateRuleChecker(Rule{
 	Deny:            []string{"10.0.0.0/8"},
 	DefaultAllowAll: true,
 })
 
-var OnlyAllowBChecker = CreateRuleChecker(Rule{
+var OnlyAllowBClassNetChecker = CreateRuleChecker(Rule{
 	Allow: []string{"72.16.0.0/12"},
 })
 
-var OnlyDenyBChecker = CreateRuleChecker(Rule{
+var OnlyDenyBClassNetChecker = CreateRuleChecker(Rule{
 	Deny:            []string{"72.16.0.0/12"},
 	DefaultAllowAll: true,
 })
 
-var OnlyAllowCChecker = CreateRuleChecker(Rule{
+var OnlyAllowCClassNetChecker = CreateRuleChecker(Rule{
 	Allow: []string{"	192.168.0.0/16"},
 })
 
-var OnlyDenyCChecker = CreateRuleChecker(Rule{
+var OnlyDenyCClassNetChecker = CreateRuleChecker(Rule{
 	Deny: []string{"	192.168.0.0/16"},
 	DefaultAllowAll: true,
 })
 
-var OnlyAllowInternalChecker = OnlyAllowAChecker
+var OnlyAllowInternalChecker = OnlyAllowAClassNetChecker
 
-var OnlyDenyInternalChecker = OnlyDenyAChecker
+var OnlyDenyInternalChecker = OnlyDenyAClassNetChecker
