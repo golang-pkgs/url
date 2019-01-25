@@ -41,10 +41,13 @@ func CreateRuleChecker(rule Rule) func(ip string) bool {
 		if addr == "" {
 			return false
 		}
-		ip, _, err := net.SplitHostPort(addr)
 
+		ip, _, err := net.SplitHostPort(addr)
 		if err != nil {
-			return false
+			ip, _, err = net.SplitHostPort(addr + ":")
+			if err != nil {
+				return false
+			}
 		}
 
 		if ip == "" {
