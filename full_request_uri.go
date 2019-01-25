@@ -2,7 +2,8 @@ package url
 
 import "net/http"
 
-func GetFullQuestURI(r *http.Request) string {
+// GetFullRequestURI parses the full request URI
+func GetFullRequestURI(r *http.Request) string {
 	scheme := "http://"
 	if r.TLS != nil {
 		scheme = "https://"
@@ -11,7 +12,8 @@ func GetFullQuestURI(r *http.Request) string {
 	return scheme + r.Host + r.RequestURI
 }
 
-func GetFullQuestPath(r *http.Request) string {
+// GetFullRequestPath parses the full request path(without URI)
+func GetFullRequestPath(r *http.Request) string {
 	scheme := "http://"
 	if r.TLS != nil {
 		scheme = "https://"
